@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+
+
+@theme {
+  --color-dark-skin: #FFCE99; 
+}
+
+
+@theme {
+  --color-dark-brown: #562F00; 
+}
+
+.snake-loader {
+  animation: snake-rotate 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transform-origin: center;
+}
+
+@keyframes snake-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    /* This creates a "stretching" illusion by slightly scaling */
+    scale: 1.1; 
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
