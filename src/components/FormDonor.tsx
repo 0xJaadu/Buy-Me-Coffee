@@ -8,7 +8,7 @@
 //interface to define the data type and possible value
 interface FormDonorInterface{
     descriptionRef: React.RefObject<HTMLTextAreaElement | null>;
-    nameRef: React.RefObject<HTMLTextAreaElement | null>;
+    nameRef: React.RefObject<HTMLInputElement | null>;
 }
 
 export default function FormDonor({descriptionRef, nameRef}:FormDonorInterface){

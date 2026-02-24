@@ -5,7 +5,7 @@
  */
 
 import React from 'react'
-import { cn } from './utils/utils.ts';
+import { cn } from '../utils/utils.ts';
 import SnakeLoading from './LoadingSVG.tsx';
 
 // Button styling for active/ready state
@@ -14,8 +14,7 @@ const btnClasses = ' min-w-50 min-h-15 w-50 -mt-4 py-4  rounded-2xl font-bold te
 // Button styling for disabled/processing state
 const btnTxProcessingClass = " hover:cursor-not-allowed hover:bg-slate-700 hover:shadow-slate-700 active:scale-[1] opacity-70 flex items-center justify-center gap-3 bg-slate-700 text-slate-300 ";
 // Combined button states for different UI scenarios
-const connectedButCupNotSelected = cn(btnClasses + " " +  btnTxProcessingClass)
-const notConnectedButCupSelected = cn(connectedButCupNotSelected  + " " + "hover:cursor-pointer")
+
 const unresponsiveBtnState = cn(btnClasses + " " + btnTxProcessingClass + " pointer-events-none")
 
 // Mapping of cup number to ETH amount
@@ -38,9 +37,6 @@ interface SendButtonProps {
   isConnected: boolean;
   btnClicked:0 | 1 | 2 | 3; // Specific numbers are safer than 'number'
   handleConnect: () => void;
-  status: string;
-  address: string;
-  setStatus: (status: string) => void;
   sendTransaction: (arg1: string, arg2: string) => Promise<boolean>;
   hash: string;
   nameData: React.RefObject<HTMLInputElement | null>;
@@ -48,7 +44,7 @@ interface SendButtonProps {
 
 }
 
-export default function SendButton({isConnected, btnClicked, handleConnect, status, address, setStatus, sendTransaction, hash, nameData, descriptionData}: SendButtonProps){
+export default function SendButton({isConnected, btnClicked, handleConnect, sendTransaction, hash, nameData, descriptionData}: SendButtonProps){
   // Button state: 1 = ready, 2 = processing, 3 = completed
   const [btnState, setBtnState] = React.useState(1);
   
@@ -60,7 +56,7 @@ export default function SendButton({isConnected, btnClicked, handleConnect, stat
    * Disables button during wallet connection and transaction processing
    */
   function classChanger(){
-        if (status === "connecting") return unresponsiveBtnState;
+        // if (status === "connecting") return unresponsiveBtnState;
         if (!isConnected) return btnClasses;
         if (isConnected && btnClicked === 0) return unresponsiveBtnState;
         if (btnState === 2) return unresponsiveBtnState;
@@ -75,9 +71,14 @@ export default function SendButton({isConnected, btnClicked, handleConnect, stat
    */
 
     function getMessageData(){
-        const message =`Name: ${nameData.current.value}, Description: ${descriptionData.current.value}`
+
+        if (nameData.current && descriptionData.current) {
+            const message =`Name: ${nameData.current.value}, Description: ${descriptionData.current.value}`
+            return message
+    }else{
+        const message =`No Message`
         return message
-    }
+    }}
     async function handleTransactionFlow() {
         if (!isConnected) {
             handleConnect();
@@ -118,7 +119,7 @@ export default function SendButton({isConnected, btnClicked, handleConnect, stat
             </span><br/>
             <button 
                 onClick={handleTransactionFlow} 
-                disabled={status === "connecting" || btnState==2} 
+                disabled={ btnState==2} 
                 className={classChanger()}
             >
                 {btnConditions()}

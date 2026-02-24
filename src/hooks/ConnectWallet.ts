@@ -7,20 +7,26 @@
 import {ethers} from 'ethers';
 import {useState} from 'react';
 
+
+//define the interface:
+
+
 export function ConnectWallet(){
     // Wallet address after successful connection
     const [address, setAddress] = useState<null | string>(null);
     // Connection status flag for UI feedback
-    const [status, setStatus] = useState(false);
+    const [status, setStatus] = useState<boolean>(false);
     // Error messages for connection or transaction failures
     const [error, setError] = useState<null | string>(null)
     // Transaction hash for completed transactions
-    const [hash, setHash] = useState<undefined | string>(undefined)
+    const [hash, setHash] = useState<string>("")
 
     /**
      * Initiates MetaMask wallet connection and retrieves user address
      * Updates address state on successful connection
      */
+    
+
     const walletConnect= async()=>{
         if (window.ethereum){
             try{
@@ -29,7 +35,6 @@ export function ConnectWallet(){
                 const signer = await provider.send('eth_requestAccounts', []);
 
                 const getAddress = signer[0];
-                const getBalance = ethers.formatEther(await provider.getBalance(signer[0]));
 
                 setAddress(getAddress);
                 setStatus(false);
@@ -63,7 +68,8 @@ export function ConnectWallet(){
             const transaction = await signer.sendTransaction(tx)    
             const receipt = await transaction.wait();
             console.log(receipt)
-            setHash(receipt?.hash)
+            if (receipt) setHash(receipt.hash);
+            else if(!receipt) {throw new Error('No receipt produced!!!')}
             return true;
         } catch(err){
             console.error(err)
@@ -78,7 +84,7 @@ export function ConnectWallet(){
             const contractAddress = '0x01aec705EE6e10F2F0576692507CE1b4492DD7c1';
 
             const provider = new ethers.BrowserProvider(window.ethereum);
-            const connectionPopup = await provider.send('eth_requestAccounts', []);
+            await provider.send('eth_requestAccounts', []); //triggers the wallet pop up again if disconnected...
             const signer = await provider.getSigner();
 
             // Define contract ABI with receiveBalance function

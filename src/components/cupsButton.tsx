@@ -1,5 +1,12 @@
 
-export default function CupsButtons({cupClicked, setCupClicked}){
+
+//interfaces for props:
+interface defineTypes{
+  cupClicked: 0 | 1 | 2 | 3;
+  setCupClicked:React.Dispatch<React.SetStateAction<0 | 1 | 2 | 3>>;
+}
+
+export default function CupsButtons({cupClicked, setCupClicked} : defineTypes){
 
     //default button classes
     const cardBase = "flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all cursor-pointer w-full max-w-[120px]"

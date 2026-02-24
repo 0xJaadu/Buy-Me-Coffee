@@ -5,31 +5,34 @@
  */
 import {useRef} from 'react';
 import React from 'react';
-import './output.css'
-import SendButton from './TransactionButton.tsx';
-import IsConnectDisplay from './connectedStatus.tsx'
+import './components/output.css'
+import SendButton from './components/TransactionButton.tsx';
+import IsConnectDisplay from './components/connectedStatus.tsx'
 import {ConnectWallet} from './hooks/ConnectWallet.ts'
-import { ethers } from 'ethers';
-import CupsButtons from './cupsButton.tsx';
-import FormDonor from './FormDonor.tsx';
+import CupsButtons from './components/cupsButton.tsx';
+import FormDonor from './components/FormDonor.tsx';
 
 // Tailwind CSS classes for main layout container
 const mainContainerClasses = "ml-0  h-[100vh] w-full bg-[#0F172A] )"
 // Base styling for coffee cup selection cards
 
 
-//to store input message
+//defining interface for fixing type issues:
+// interface defineTypes{
+//   btnClicked: 0 | 1 | 2 | 3;
+// }
+
+
 
 
 function App() {
   // Destructure wallet connection utilities from the hook
-  const {status, address, walletConnect, error, setStatus, callContract, hash} = ConnectWallet();
+  const {address, walletConnect, callContract, hash} = ConnectWallet();
   
   //Track the name and description set by user
-  const [messageDetails, setMessageDetails] = React.useState<null | string>(null)
 
   // Track which coffee cup was selected (0 = none, 1/2/3 = cup option)
-  const [cupClicked, setCupClicked] = React.useState(0);
+  const [cupClicked, setCupClicked] = React.useState<0 | 1 | 2 | 3>(0);
   
   // Handle wallet connection trigger
   const handleConnect = () => {
@@ -60,11 +63,11 @@ function App() {
 
           {/*Main button to send transaction*/}
           <SendButton isConnected={!!address}
-           btnClicked={(cupClicked)}
+           btnClicked ={(cupClicked)} 
             handleConnect={handleConnect}
-             status={status}
-              address={address}
-               setStatus={setStatus}
+             
+              
+              
                 sendTransaction={callContract}
                  hash={hash}
                   nameData={nameRef}
