@@ -1,4 +1,4 @@
-# Clean Buy Me Coffee 
+# Buy Me Coffee 
 
 Short version: this is a tiny React + TypeScript + Vite app that lets people "buy you a coffee" on-chain (Sepolia testnet) with a fun UI.
 
